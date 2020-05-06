@@ -48,6 +48,24 @@ app.get("/api/blocks", (req, res) => {
     res.json(blockchain.chain);
 });
 
+app.get("/api/blocks/length", (req, res) => {
+    res.json(blockchain.chain.length);
+});
+
+app.get("/api/blocks/:id", (req, res) => {
+    const { id } = req.params;
+    const { length } = blockchain.chain;
+    
+    const reverseChain = blockchain.chain.slice().reverse();
+    let start = (id-1) * 5;
+    let end = id * 5;
+
+    start = start < length ? start : length;
+    end = end < length ? end : length;
+
+    res.json(reverseChain.slice(start, end));
+});
+
 app.post("/api/mine", (req, res) => {
     const { data } = req.body;
 
@@ -108,6 +126,20 @@ app.get("/api/wallet-info", (req, res) => {
             address
         })
     });
+});
+
+app.get("/api/known-addresses", (req, res) => {
+    const addressMap = {};
+
+    for (let block of blockchain.chain) {
+        for(let transaction of block.data) {
+            const recipient = Object.keys(transaction.outputMap);
+
+            recipient.forEach(recipient => addressMap[recipient] = recipient);
+        }
+    }
+
+    res.json(Object.keys(addressMap));
 });
 
 const syncWithRootState = () => {
