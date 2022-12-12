@@ -23,7 +23,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "elliptic": "^6.5.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "got": "^11.0.2",
     "hex-to-binary": "^1.0.1",
     "pubnub": "^4.27.5",
